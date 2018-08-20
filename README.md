@@ -17,31 +17,28 @@ pip install LianJiaSpider
 
 
 + ### 示例代码
-+ #### 1. 地区区域范围数据库准备
-```python
 
-import Lianjia.lianjia as lj
+> #### 1. 地区区域范围数据库准备
+> ```python
+> import Lianjia.lianjia as lj
+> lj.SaveCityBorderIntoDB('上海')
+> #保存上海市的所有区域边缘经纬度并保存在目录下district.db文件内
+> ```
+> >  #### district.db文件表结构如下
+> > 
+> > ```sql
+> > create table 城市名 
+> > (
+> >   id int PRIMARY KEY ,
+> >   name text,
+> >   longitude text,
+> >   latitude text,
+> >   border text,
+> >   unit_price int,
+> >   count int
+> > )
+> > ```
 
-lj.SaveCityBorderIntoDB('上海')
-
-#保存上海市的所有区域边缘经纬度并保存在目录下district.db文件内
-
-```
-+ #### district.db文件表结构如下
-
-
-```sql
-create table 城市名 
-(
-  id int PRIMARY KEY ,
-  name text,
-  longitude text,
-  latitude text,
-  border text,
-  unit_price int,
-  count int
-)
-```
 + #### 2. 爬取区域内二手房楼盘数据
 
 ```python
