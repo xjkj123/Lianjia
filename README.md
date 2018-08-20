@@ -59,6 +59,7 @@ pip install LianJiaSpider
 > >   count int
 > > )
 > > ```
+
 > #### 3. 爬取区域内楼盘中每个在售房屋的信息
 > ```python
 > import Lianjia.lianjia as lj
@@ -94,17 +95,18 @@ pip install LianJiaSpider
 > > publishTime, isVilla, villaNoFloorLevel,
 > > villaName, tags)
 > > ```
+
 + #### 以上1，2,3步骤 请依次执行，否则会出现错误
 
-+ #### 或者直接运行以下代码，但耗时会很久
-```python
+> + #### 或者直接运行以下代码，但耗时会很久
+> ```python
+> import Lianjia.lianjia as lj
+> city='上海'
+> lj.SaveCityBorderIntoDB(city)
+> lj.HoleCityDown(city)
+> lj.GetCompleteHousingInfo(city)
+> ```
 
-import Lianjia.lianjia as lj
-city='上海'
-lj.SaveCityBorderIntoDB(city)
-lj.HoleCityDown(city)
-lj.GetCompleteHousingInfo(city)
-```
 ### 2. 高级用法
 + 示例
 ```
