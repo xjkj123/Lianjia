@@ -17,7 +17,7 @@ pip install LianJiaSpider
 
 
 + ### 示例代码
-+ ##### 地区区域范围数据库准备
++ #### 1. 地区区域范围数据库准备
 ```python
 
 import Lianjia.lianjia as lj
@@ -27,7 +27,7 @@ lj.SaveCityBorderIntoDB('上海')
 #保存上海市的所有区域边缘经纬度并保存在目录下district.db文件内
 
 ```
-+ ##### district.db文件表结构如下
++ #### district.db文件表结构如下
 
 
 ```sql
@@ -42,7 +42,7 @@ create table 城市名
   count int
 )
 ```
-+ ##### 1.2.2 爬取区域内二手房楼盘数据
++ #### 2. 爬取区域内二手房楼盘数据
 
 ```python
 import Lianjia.lianjia as lj
@@ -52,7 +52,7 @@ lj.HoleCityDown('上海')
 #保存市区内所有在售楼盘的信息并保存在目录下LianJia_area.db文件内
 
 ```
-+ ##### LianJia_area.db文件表结构如下
++ #### LianJia_area.db文件表结构如下
 
 
 ```
@@ -68,7 +68,7 @@ create table 城市名
 )
 
 ```
-+ ##### 1.2.3 爬取区域内楼盘中每个在售房屋的信息
++ #### 3. 爬取区域内楼盘中每个在售房屋的信息
 
 ```python
 import Lianjia.lianjia as lj
@@ -80,7 +80,7 @@ lj.GetCompleteHousingInfo('上海')
 #保存所有在售楼盘的每套房屋信息并保存在目录下DetailInfo.db文件内
 
 ```
-+ ##### DetailInfo.db文件表结构如下
++ #### DetailInfo.db文件表结构如下
 ```
 
 create table 城市名 
@@ -109,9 +109,9 @@ publishTime, isVilla, villaNoFloorLevel,
 villaName, tags)
 
 ```
-+ ### 以上1.2.1，1.2.2，1.2.3 请依次执行，否则会出现错误
++ #### 以上1，2,3步骤 请依次执行，否则会出现错误
 
-+ ### 或者直接运行以下代码，但耗时会很久
++ #### 或者直接运行以下代码，但耗时会很久
 ```python
 
 import Lianjia.lianjia as lj
