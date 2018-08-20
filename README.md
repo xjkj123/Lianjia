@@ -39,73 +39,61 @@ pip install LianJiaSpider
 > > )
 > > ```
 
-+ #### 2. 爬取区域内二手房楼盘数据
-
-```python
-import Lianjia.lianjia as lj
-
-#lj.SaveCityBorderIntoDB('上海')
-lj.HoleCityDown('上海')
-#保存市区内所有在售楼盘的信息并保存在目录下LianJia_area.db文件内
-
-```
-+ #### LianJia_area.db文件表结构如下
-
-
-```
-create table 城市名 
-(
-  id int PRIMARY KEY ,
-  district text,
-  name text,
-  longitude text,
-  latitude text,
-  unit_price int,
-  count int
-)
-
-```
-+ #### 3. 爬取区域内楼盘中每个在售房屋的信息
-
-```python
-import Lianjia.lianjia as lj
-
-#lj.SaveCityBorderIntoDB('上海')
-#lj.HoleCityDown('上海')
-lj.GetCompleteHousingInfo('上海')
-
-#保存所有在售楼盘的每套房屋信息并保存在目录下DetailInfo.db文件内
-
-```
-+ #### DetailInfo.db文件表结构如下
-```
-
-create table 城市名 
-(houseId PRIMARY  KEY , 
-houseCode, title, appid, 
-source, imgSrc, layoutImgSrc, 
-imgSrcUri,layoutImgSrcUri, 
-roomNum, square, buildingArea, 
-buildYear, isNew, ctime,
-mtime, orientation, floorStat, 
-totalFloor, decorateType, 
-hbtName,isYezhuComment, 
-isGarage, houseType, isFocus, 
-status, isValid, signTime,
-signSource, signSourceCn, 
-isDisplay, address, community, 
-communityId,communityName, 
-communityUrl, communityUrlEsf, 
-districtId, districtUrldistrictName, 
-regionId, regionUrl, regionName, 
-bbdName, bbdUrl, houseCityId,
-subwayInfo, schoolName, schoolArr, 
-bizcircleFullSpell, house_video_info , 
-price,unitPrice, viewUrl, listPrice, 
-publishTime, isVilla, villaNoFloorLevel,
-villaName, tags)
-
-```
+> #### 2. 爬取区域内二手房楼盘数据
+> ```python
+> import Lianjia.lianjia as lj
+> #lj.SaveCityBorderIntoDB('上海')
+> lj.HoleCityDown('上海')
+> #保存市区内所有在售楼盘的信息并保存在目录下LianJia_area.db文件内
+> ```
+> > #### LianJia_area.db文件表结构如下
+> > ```
+> > create table 城市名 
+> > (
+> >   id int PRIMARY KEY ,
+> >   district text,
+> >   name text,
+> >   longitude text,
+> >   latitude text,
+> >   unit_price int,
+> >   count int
+> > )
+> > ```
+> #### 3. 爬取区域内楼盘中每个在售房屋的信息
+> ```python
+> import Lianjia.lianjia as lj
+> #lj.SaveCityBorderIntoDB('上海')
+> #lj.HoleCityDown('上海')
+> lj.GetCompleteHousingInfo('上海')
+> #保存所有在售楼盘的每套房屋信息并保存在目录下DetailInfo.db文件内
+> ```
+> >  #### DetailInfo.db文件表结构如下
+> > ```
+> > create table 城市名 
+> > (houseId PRIMARY  KEY , 
+> > houseCode, title, appid, 
+> > source, imgSrc, layoutImgSrc, 
+> > imgSrcUri,layoutImgSrcUri, 
+> > roomNum, square, buildingArea, 
+> > buildYear, isNew, ctime,
+> > mtime, orientation, floorStat, 
+> > totalFloor, decorateType, 
+> > hbtName,isYezhuComment, 
+> > isGarage, houseType, isFocus, 
+> > status, isValid, signTime,
+> > signSource, signSourceCn, 
+> > isDisplay, address, community, 
+> > communityId,communityName, 
+> > communityUrl, communityUrlEsf, 
+> > districtId, districtUrldistrictName, 
+> > regionId, regionUrl, regionName, 
+> > bbdName, bbdUrl, houseCityId,
+> > subwayInfo, schoolName, schoolArr, 
+> > bizcircleFullSpell, house_video_info , 
+> > price,unitPrice, viewUrl, listPrice, 
+> > publishTime, isVilla, villaNoFloorLevel,
+> > villaName, tags)
+> > ```
 + #### 以上1，2,3步骤 请依次执行，否则会出现错误
 
 + #### 或者直接运行以下代码，但耗时会很久
