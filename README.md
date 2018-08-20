@@ -1,11 +1,11 @@
 # LianJiaSpider速度一分钟1000+
-### 0.前言
-#### 0.0.0利用此网页接口实现功能 https://cs.lianjia.com/ditu/
-#### 0.0.1目前支持的城市 长沙 上海 北京 烟台 厦门 后续会支持更多请把你需要的城市发为Issues我会时常看
-#### 0.0.2作者：Mrx ；WeChat：xwk245776832 ； 邮箱：xjkj123@icloud.com 有任何问题请发邮件 我会尽可能帮助你
-#### 0.0.3此接口通过网页js脚本计算出get所需参数，攻破了此难点，接口调用次数无限，速度不限，上海市100000+数据不会被反爬
+### 0. 前言
+#### 0.0.0 利用此网页接口实现功能 https://cs.lianjia.com/ditu/
+#### 0.0.1 目前支持的城市 长沙 上海 北京 烟台 厦门 后续会支持更多请把你需要的城市发为Issues我会时常看
+#### 0.0.2 作者：Mrx ；WeChat：xwk245776832 ； 邮箱：xjkj123@icloud.com 有任何问题请发邮件 我会尽可能帮助你
+#### 0.0.3 此接口通过网页js脚本计算出get所需参数，攻破了此难点，接口调用次数无限，速度不限，上海市100000+数据不会被反爬
 
-### 1.首次运行
+### 1. 首次运行
 #### 1.1 下载安装
 ```commandline
 pip install LianJiaSpider
@@ -13,7 +13,7 @@ pip install LianJiaSpider
 
 
 #### 1.2 示例代码
-##### 1.2.1地区区域范围数据库准备
+##### 1.2.1 地区区域范围数据库准备
 ```python
 
 import Lianjia.lianjia as lj
@@ -38,7 +38,7 @@ create table 城市名
   count int
 )
 ```
-##### 1.2.2爬取区域内二手房楼盘数据
+##### 1.2.2 爬取区域内二手房楼盘数据
 
 ```python
 import Lianjia.lianjia as lj
@@ -64,7 +64,7 @@ create table 城市名
 )
 
 ```
-##### 1.2.3爬取区域内楼盘中每个在售房屋的信息
+##### 1.2.3 爬取区域内楼盘中每个在售房屋的信息
 
 ```python
 import Lianjia.lianjia as lj
@@ -105,7 +105,7 @@ publishTime, isVilla, villaNoFloorLevel,
 villaName, tags)
 
 ```
-### 以上1.2.1，1.2.2，1.2.3请依次执行，否则会出现错误
+### 以上1.2.1，1.2.2，1.2.3 请依次执行，否则会出现错误
 
 ### 或者直接运行以下代码，但耗时会很久
 ```python
@@ -116,20 +116,20 @@ lj.SaveCityBorderIntoDB(city)
 lj.HoleCityDown(city)
 lj.GetCompleteHousingInfo(city)
 ```
-### 2.高级用法
+### 2. 高级用法
 ```
 #稍后更新，先写这么多
 
 ```
 
 
-### 3.版本历史
+### 3. 版本历史
 #### 1.1.0：
-1.实现链家地图api协议的逆向实现经纬度区域找房
-2.简单上海市区爬虫
+1. 实现链家地图api协议的逆向实现经纬度区域找房
+2. 简单上海市区爬虫
 #### 1.1.5
-1.新增pip，使用此项目可以直接pip install LianJiaSpider安装
-2.新增城市
+1. 新增pip，使用此项目可以直接pip install LianJiaSpider安装
+2. 新增城市
 
 
 
