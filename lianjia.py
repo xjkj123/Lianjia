@@ -1,4 +1,3 @@
-import execjs
 import requests
 import time
 import tqdm
@@ -6,6 +5,7 @@ import json
 import sqlite3
 import numpy
 import math
+import hashlib
 
 sql_InsertDetailInfo = '''insert into %s(houseId,houseCode,title,appid,source,imgSrc,layoutImgSrc,imgSrcUri,layoutImgSrcUri,roomNum,square,buildingArea,buildYear,isNew,ctime,mtime,orientation,floorStat,totalFloor,decorateType,hbtName,isYezhuComment,isGarage,houseType,isFocus,status,isValid,signTime,signSource,signSourceCn,isDisplay,address,community,communityId,communityName,communityUrl,communityUrlEsf,districtId,districtUrl,districtName,regionId,regionUrl,regionName,bbdName,bbdUrl,houseCityId,subwayInfo,schoolName,schoolArr,bizcircleFullSpell,house_video_info,price,unitPrice,viewUrl,listPrice,publishTime,isVilla,villaNoFloorLevel,villaName,tags)values(:houseId,:houseCode,:title,:appid,:source,:imgSrc,:layoutImgSrc,:imgSrcUri,:layoutImgSrcUri,:roomNum,:square,:buildingArea,:buildYear,:isNew,:ctime,:mtime,:orientation,:floorStat,:totalFloor,:decorateType,:hbtName,:isYezhuComment,:isGarage,:houseType,:isFocus,:status,:isValid,:signTime,:signSource,:signSourceCn,:isDisplay,:address,:community,:communityId,:communityName,:communityUrl,:communityUrlEsf,:districtId,:districtUrl,:districtName,:regionId,:regionUrl,:regionName,:bbdName,:bbdUrl,:houseCityId,:subwayInfo,:schoolName,:schoolArr,:bizcircleFullSpell,:house_video_info,:price,:unitPrice,:viewUrl,:listPrice,:publishTime,:isVilla,:villaNoFloorLevel,:villaName,:tags)'''
 sql_CreateDetailInfo = '''create table %s (houseId PRIMARY  KEY 
@@ -23,7 +23,6 @@ sql_CreateDetailInfo = '''create table %s (houseId PRIMARY  KEY
 
 class Lianjia():
 
-
     def __init__(self, city):
 
         self.city_dict = {
@@ -39,9 +38,12 @@ class Lianjia():
                    'min_lng': '117.892627'}
             }
         self.city_id = self.city_dict[city]['city_id']
-        self.city=city
+        self.city = city
 
-        self.url_fang = '''https://ajax.lianjia.com/map/resblock/ershoufanglist/?callback=jQuery111106822012072868358_1534402288206&id=%s&order=0&page=%d&filters=%s&request_ts=%d&source=ljpc&authorization=%s&_=%d'''
+        self.url_fang = 'https://ajax.lianjia.com/map/resblock/ershoufanglist/' \
+                        '?callback=jQuery111106822012072868358_1534402288206&' \
+                        'id=%s&order=0&page=%d&filters=%s&request_ts=%d&' \
+                        'source=ljpc&authorization=%s&_=%d'
         # %7B%7D
         self.url = 'https://ajax.lianjia.com/map/search/ershoufang/?callback=jQuery1111012389114747347363_1534230881479' \
               '&city_id=%s' \
@@ -74,197 +76,23 @@ class Lianjia():
             'Referer': 'https://bj.lianjia.com/ditu/',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
         }
-        self.js = '''
-        var window = window || {};
 
-        function e(e, t) {
-            var n = (65535 & e) + (65535 & t);
-            return (e >> 16) + (t >> 16) + (n >> 16) << 16 | 65535 & n
-        }
+    def GetMD5(self, string_):
+        m = hashlib.md5()
+        m.update(string_.encode('utf-8'))
+        return m.hexdigest()
 
-        function t(e, t) {
-            return e << t | e >>> 32 - t
-        }
-
-        function n(n, i, a, r, o, s) {
-            return e(t(e(e(i, n), e(r, s)), o), a)
-        }
-
-        function i(e, t, i, a, r, o, s) {
-            return n(t & i | ~t & a, e, t, r, o, s)
-        }
-
-        function a(e, t, i, a, r, o, s) {
-            return n(t & a | i & ~a, e, t, r, o, s)
-        }
-
-        function r(e, t, i, a, r, o, s) {
-            return n(t ^ i ^ a, e, t, r, o, s)
-        }
-
-        function o(e, t, i, a, r, o, s) {
-            return n(i ^ (t | ~a), e, t, r, o, s)
-        }
-
-        function s(t, n) {
-            t[n >> 5] |= 128 << n % 32,
-                t[14 + (n + 64 >>> 9 << 4)] = n;
-            var s, l, c, d, u, g = 1732584193,
-                f = -271733879,
-                m = -1732584194,
-                p = 271733878;
-            for (s = 0; s < t.length; s += 16) l = g,
-                c = f,
-                d = m,
-                u = p,
-                g = i(g, f, m, p, t[s], 7, -680876936),
-                p = i(p, g, f, m, t[s + 1], 12, -389564586),
-                m = i(m, p, g, f, t[s + 2], 17, 606105819),
-                f = i(f, m, p, g, t[s + 3], 22, -1044525330),
-                g = i(g, f, m, p, t[s + 4], 7, -176418897),
-                p = i(p, g, f, m, t[s + 5], 12, 1200080426),
-                m = i(m, p, g, f, t[s + 6], 17, -1473231341),
-                f = i(f, m, p, g, t[s + 7], 22, -45705983),
-                g = i(g, f, m, p, t[s + 8], 7, 1770035416),
-                p = i(p, g, f, m, t[s + 9], 12, -1958414417),
-                m = i(m, p, g, f, t[s + 10], 17, -42063),
-                f = i(f, m, p, g, t[s + 11], 22, -1990404162),
-                g = i(g, f, m, p, t[s + 12], 7, 1804603682),
-                p = i(p, g, f, m, t[s + 13], 12, -40341101),
-                m = i(m, p, g, f, t[s + 14], 17, -1502002290),
-                f = i(f, m, p, g, t[s + 15], 22, 1236535329),
-                g = a(g, f, m, p, t[s + 1], 5, -165796510),
-                p = a(p, g, f, m, t[s + 6], 9, -1069501632),
-                m = a(m, p, g, f, t[s + 11], 14, 643717713),
-                f = a(f, m, p, g, t[s], 20, -373897302),
-                g = a(g, f, m, p, t[s + 5], 5, -701558691),
-                p = a(p, g, f, m, t[s + 10], 9, 38016083),
-                m = a(m, p, g, f, t[s + 15], 14, -660478335),
-                f = a(f, m, p, g, t[s + 4], 20, -405537848),
-                g = a(g, f, m, p, t[s + 9], 5, 568446438),
-                p = a(p, g, f, m, t[s + 14], 9, -1019803690),
-                m = a(m, p, g, f, t[s + 3], 14, -187363961),
-                f = a(f, m, p, g, t[s + 8], 20, 1163531501),
-                g = a(g, f, m, p, t[s + 13], 5, -1444681467),
-                p = a(p, g, f, m, t[s + 2], 9, -51403784),
-                m = a(m, p, g, f, t[s + 7], 14, 1735328473),
-                f = a(f, m, p, g, t[s + 12], 20, -1926607734),
-                g = r(g, f, m, p, t[s + 5], 4, -378558),
-                p = r(p, g, f, m, t[s + 8], 11, -2022574463),
-                m = r(m, p, g, f, t[s + 11], 16, 1839030562),
-                f = r(f, m, p, g, t[s + 14], 23, -35309556),
-                g = r(g, f, m, p, t[s + 1], 4, -1530992060),
-                p = r(p, g, f, m, t[s + 4], 11, 1272893353),
-                m = r(m, p, g, f, t[s + 7], 16, -155497632),
-                f = r(f, m, p, g, t[s + 10], 23, -1094730640),
-                g = r(g, f, m, p, t[s + 13], 4, 681279174),
-                p = r(p, g, f, m, t[s], 11, -358537222),
-                m = r(m, p, g, f, t[s + 3], 16, -722521979),
-                f = r(f, m, p, g, t[s + 6], 23, 76029189),
-                g = r(g, f, m, p, t[s + 9], 4, -640364487),
-                p = r(p, g, f, m, t[s + 12], 11, -421815835),
-                m = r(m, p, g, f, t[s + 15], 16, 530742520),
-                f = r(f, m, p, g, t[s + 2], 23, -995338651),
-                g = o(g, f, m, p, t[s], 6, -198630844),
-                p = o(p, g, f, m, t[s + 7], 10, 1126891415),
-                m = o(m, p, g, f, t[s + 14], 15, -1416354905),
-                f = o(f, m, p, g, t[s + 5], 21, -57434055),
-                g = o(g, f, m, p, t[s + 12], 6, 1700485571),
-                p = o(p, g, f, m, t[s + 3], 10, -1894986606),
-                m = o(m, p, g, f, t[s + 10], 15, -1051523),
-                f = o(f, m, p, g, t[s + 1], 21, -2054922799),
-                g = o(g, f, m, p, t[s + 8], 6, 1873313359),
-                p = o(p, g, f, m, t[s + 15], 10, -30611744),
-                m = o(m, p, g, f, t[s + 6], 15, -1560198380),
-                f = o(f, m, p, g, t[s + 13], 21, 1309151649),
-                g = o(g, f, m, p, t[s + 4], 6, -145523070),
-                p = o(p, g, f, m, t[s + 11], 10, -1120210379),
-                m = o(m, p, g, f, t[s + 2], 15, 718787259),
-                f = o(f, m, p, g, t[s + 9], 21, -343485551),
-                g = e(g, l),
-                f = e(f, c),
-                m = e(m, d),
-                p = e(p, u);
-            return [g, f, m, p]
-        }
-
-        function l(e) {
-            var t, n = "";
-            for (t = 0; t < 32 * e.length; t += 8) n += String.fromCharCode(e[t >> 5] >>> t % 32 & 255);
-            return n
-        }
-
-        function c(e) {
-            var t, n = [];
-            for (n[(e.length >> 2) - 1] = void 0, t = 0; t < n.length; t += 1) n[t] = 0;
-            for (t = 0; t < 8 * e.length; t += 8) n[t >> 5] |= (255 & e.charCodeAt(t / 8)) << t % 32;
-            return n
-        }
-
-        function d(e) {
-            return l(s(c(e), 8 * e.length))
-        }
-
-        function u(e, t) {
-            var n, i, a = c(e),
-                r = [],
-                o = [];
-            for (r[15] = o[15] = void 0, a.length > 16 && (a = s(a, 8 * e.length)), n = 0; n < 16; n += 1) r[n] = 909522486 ^ a[n],
-                o[n] = 1549556828 ^ a[n];
-            return i = s(r.concat(c(t)), 512 + 8 * t.length),
-                l(s(o.concat(i), 640))
-        }
-
-        function g(e) {
-            var t, n, i = "0123456789abcdef",
-                a = "";
-            for (n = 0; n < e.length; n += 1) t = e.charCodeAt(n),
-                a += i.charAt(t >>> 4 & 15) + i.charAt(15 & t);
-            return a
-        }
-
-        function f(e) {
-            return unescape(encodeURIComponent(e))
-        }
-
-        function m(e) {
-            return d(f(e))
-        }
-
-        function p(e) {
-            return g(m(e))
-        }
-
-        function _(e, t) {
-            return u(f(e), f(t))
-        }
-
-        function h(e, t) {
-            return g(_(e, t))
-        }
-
-        function v(e, t, n) {
-            return t ? n ? _(t, e) : h(t, e) : n ? m(e) : p(e)
-        }
-
-        function getMd5(e) {
-            var t = [],
-                i = "";
-            for (var a in e) t.push(a);
-            t.sort();
-            for (var a = 0; a < t.length; a++) {
-                var r = t[a];
-                "filters" !== r && (i += r + "=" + e[r])
-            }
-            return i ? (window.md5 = n, v("vfkpbin1ix2rb88gfjebs0f60cbvhedl" + i)) : "";
-        }
-        '''
-
-
-    def GetAuthorization(self, dict)->str:
-        jsstr = self.js
-        ctx = execjs.compile(jsstr)
-        authorization = ctx.call('getMd5', dict)
+    def GetAuthorization(self, dict_)->str:
+        datastr = "vfkpbin1ix2rb88gfjebs0f60cbvhedlcity_id={city_id}group_type={group_type}max_lat={max_lat}" \
+                   "max_lng={max_lng}min_lat={min_lat}min_lng={min_lng}request_ts={request_ts}".format(
+            city_id=dict_["city_id"],
+            group_type=dict_["group_type"],
+            max_lat=dict_["max_lat"],
+            max_lng=dict_["max_lng"],
+            min_lat=dict_["min_lat"],
+            min_lng=dict_["min_lng"],
+            request_ts=dict_["request_ts"])
+        authorization = self.GetMD5(datastr)
         return authorization
 
     def GetDistrictInfo(self)->list:
@@ -372,10 +200,8 @@ class Lianjia():
         ll = []
         for page in range(1, math.ceil(count / 10) + 1):
             time_13 = int(round(time.time() * 1000))
-            jsstr = self.js
-            ctx = execjs.compile(jsstr)
-            authorization = ctx.call('getMd5',
-                                     {'filters': "{}", 'id': id, 'order': 0, 'page': page, 'request_ts': time_13})
+            authorization = self.GetMD5("id={id}order={order}page={page}request_ts={request_ts}".format(
+                id=id, order=0, page=page, request_ts=time_13))
             ###############-----拼接请求url-----#################
             url = self.url_fang % (id, page, '%7B%7D', time_13, authorization, time_13)
 
@@ -387,9 +213,6 @@ class Lianjia():
                     ll.append(house_json['data']['ershoufang_info']['list'][x])
 
         return ll
-
-
-
 
 
 def SaveCityBorderIntoDB(city):  # 读取某市各个区域轮廓
@@ -430,6 +253,7 @@ def SaveCityBorderIntoDB(city):  # 读取某市各个区域轮廓
     #     for y in numpy.arange(30.820294, 31.487821, 0.1):
     #         print((round(y,6), round(y - 0.1,6), round(x,6), round(x - 0.1,6)))
     #         print(requlianjia(round(y,6), round(y - 0.1,6), round(x,6), round(x - 0.1,6)))
+
 
 def HoleCityDown(city):  # 爬取小区套数平均价格
     with sqlite3.connect('district.db') as conn:
@@ -486,6 +310,7 @@ def HoleCityDown(city):  # 爬取小区套数平均价格
 
                         pbar.set_description(district + z['name'] + '住房已存在')
 
+
 def GetCompleteHousingInfo(city):
     # 爬取所有小区内每个住房信息
     with sqlite3.connect('DetailInfo.db') as conn1:
@@ -519,6 +344,6 @@ def GetCompleteHousingInfo(city):
 
 if __name__ == '__main__':
     city = '北京'
-    #SaveCityBorderIntoDB(city)  # 下载城市区域数据
-    #HoleCityDown(city)  # 下载区域住房数据
+    SaveCityBorderIntoDB(city)  # 下载城市区域数据
+    HoleCityDown(city)  # 下载区域住房数据
     GetCompleteHousingInfo(city)#获取详细在售房屋

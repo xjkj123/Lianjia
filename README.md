@@ -122,6 +122,8 @@ pip install LianJiaSpider
 + 1.1.5
 > 1. 新增pip，使用此项目可以直接pip install LianJiaSpider安装
 > 2. 新增城市
-
++ 1.2
+> 1. 删去js模块模拟获取authorization
+> 2. 增加并修改相应函数，直接调用md5函数获取authorization
 
 
