@@ -40,16 +40,11 @@ class Lianjia():
         self.city_id = self.city_dict[city]['city_id']
         self.city = city
 
-        self.url_fang = 'https://ajax.lianjia.com/map/resblock/ershoufanglist/?callback=jQuery11110617424919783834_1541868368031' \
-                        '&id=%s' \
-                        '&order=0' \
-                        '&page=%d' \
-                        '&filters=%s' \
-                        '&request_ts=%d' \
-                        '&source=ljpc' \
-                        '&authorization=%s' \
-                        '&_=%d'
-
+        self.url_fang = 'https://ajax.lianjia.com/map/resblock/ershoufanglist/' \
+                        '?callback=jQuery111106822012072868358_1534402288206&' \
+                        'id=%s&order=0&page=%d&filters=%s&request_ts=%d&' \
+                        'source=ljpc&authorization=%s&_=%d'
+        # %7B%7D
         self.url = 'https://ajax.lianjia.com/map/search/ershoufang/?callback=jQuery1111012389114747347363_1534230881479' \
               '&city_id=%s' \
               '&group_type=%s' \
@@ -70,28 +65,17 @@ class Lianjia():
                    'UM_distinctid': '165327625186a-029cf60b1994ee-3461790f-fa000-165327625199d3',
                    'select_city': '310000',
                    'lianjia_ssid': '34fc4efa-7fcc-4f3f-82ae-010401f27aa8',
-                    '_smt_uid':'5b72c5f7.5815bcdf',
-                    'Hm_lvt_9152f8221cb6243a53c83b956842be8a':'1537530243',
-                    'select_city':'110000',
-                    '_jzqc':'1',
-                    '_gid':'GA1.2.178601063.1541866763',
-                    '_jzqb':'1.2.10.1541866760.1'
-
-        }
-        '''
-
-        select_city=110000; 
-        _jzqa=1.3180246719396510700.1534145942.1537530221.1541866760.3; 
-        _jzqc=1; 
-        _jzqckmp=1; 
-        _gid=GA1.2.178601063.1541866763; 
-        _jzqb=1.2.10.1541866760.1'''
+                   'gat': '1',
+                   'gat_past': '1',
+                   'gat_global': '1',
+                   'gat_new_global': '1',
+                   'gat_dianpu_agent': '1'
+                   }
         self.headers = {
             'Host': 'ajax.lianjia.com',
-            'Referer': 'https://sh.lianjia.com/ditu/',
+            'Referer': 'https://bj.lianjia.com/ditu/',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
         }
-
 
     def GetMD5(self, string_):
         m = hashlib.md5()
@@ -216,16 +200,14 @@ class Lianjia():
         ll = []
         for page in range(1, math.ceil(count / 10) + 1):
             time_13 = int(round(time.time() * 1000))
-            authorization = self.GetMD5("vfkpbin1ix2rb88gfjebs0f60cbvhedlid={id}order={order}page={page}request_ts={request_ts}".format(
-                id=id, order=0, page=1,request_ts=time_13))
-#e = {id: "1111027380242", order: 0, page: 1, filters: "{}", request_ts: 1541871468249} 1b9f64bd353667b4e44ed593eca6451d
+            authorization = self.GetMD5("id={id}order={order}page={page}request_ts={request_ts}".format(
+                id=id, order=0, page=page, request_ts=time_13))
             ###############-----拼接请求url-----#################
-            url = self.url_fang % (id, page,'%7B%7D',time_13, authorization, time_13)
+            url = self.url_fang % (id, page, '%7B%7D', time_13, authorization, time_13)
+
             with requests.Session() as sess:
                 ret = sess.get(url=url, headers=self.headers, cookies=self.cookies)
-
-                house_json = json.loads(ret.text[41:-1])
-
+                house_json = json.loads(ret.text[42:-1])
 
                 for x in house_json['data']['ershoufang_info']['list']:
                     ll.append(house_json['data']['ershoufang_info']['list'][x])
@@ -361,7 +343,7 @@ def GetCompleteHousingInfo(city):
 
 
 if __name__ == '__main__':
-    city = '上海'
-    #SaveCityBorderIntoDB(city)  # 下载城市区域数据
-    #HoleCityDown(city)  # 下载区域住房数据
+    city = '北京'
+    SaveCityBorderIntoDB(city)  # 下载城市区域数据
+    HoleCityDown(city)  # 下载区域住房数据
     GetCompleteHousingInfo(city)#获取详细在售房屋
