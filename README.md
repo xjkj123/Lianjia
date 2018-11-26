@@ -126,5 +126,5 @@ pip install LianJiaSpider
 > 1. 删去js模块模拟获取authorization 由 @Wen Peiyu 做出修改
 > 2. 增加并修改相应函数，直接调用md5函数获取authorization
 + 1.2.0
-> 1. 更正由于删去js模块模拟获取authorization导致 info 信息获取失败的错误
+> 1. 更正由于删去js模块模拟获取authorization导致lj.GetCompleteHousingInfo(city)报错的问题
 
