@@ -2,7 +2,7 @@
 
 # 前言
 + 利用[此网页](https://sh.lianjia.com/ditu/)接口实现功能 
-+ 目前支持的城市 上海 北京 烟台 厦门 长沙 后续会支持更多请把你需要的城市发为Issues我会时常看
++ 目前支持的城市 上海 北京 广州 深圳 烟台 厦门 长沙 请把你需要的城市发为Issues我会时常看
 + 作者：Mrx ；WeChat：xwk245776832 ； 邮箱：xjkj123@icloud.com 有任何问题请发邮件 我会尽可能帮助你
 + 此接口通过网页js脚本计算出get所需参数，攻破了此难点，接口调用次数无限，速度不限，上海市100000+数据不会被反爬
 
@@ -127,4 +127,6 @@ pip install LianJiaSpider
 > 2. 增加并修改相应函数，直接调用md5函数获取authorization
 + 1.2.0
 > 1. 更正由于删去js模块模拟获取authorization导致lj.GetCompleteHousingInfo(city)报错的问题
++ 1.2.1
+> 1. 增加广州 深圳城市数据
 
