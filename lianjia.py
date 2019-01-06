@@ -352,6 +352,8 @@ def GetCompleteHousingInfo(city):
     pbar = tqdm.tqdm(area_list)
     for x in pbar:
         ret = Lianjia(city).GetHousingInfo(x[0], x[1])
+        if not ret:
+            continue
         with sqlite3.connect('DetailInfo.db') as conn:
             cursor = conn.cursor()
             for y in ret:
@@ -364,10 +366,11 @@ def GetCompleteHousingInfo(city):
                     pbar.set_description(y['title'] + '已导入')
                 except:
                     pbar.set_description(y['title'] + '已存在')
+            # break
 
 
 if __name__ == '__main__':
-    city = '深圳'
+    city = '深证'
     SaveCityBorderIntoDB(city)  # 下载城市区域数据
     HoleCityDown(city)  # 下载区域住房数据
     GetCompleteHousingInfo(city)  # 获取详细在售房屋
