@@ -19,8 +19,6 @@ sql_CreateDetailInfo = '''create table %s (houseId PRIMARY  KEY
             subwayInfo, schoolName, schoolArr, bizcircleFullSpell, house_video_info , price,
             unitPrice, viewUrl, listPrice, publishTime, isVilla, villaNoFloorLevel,
             villaName, tags)'''
-
-
 class Lianjia():
     def __init__(self, city):
         self.city_dict = {
@@ -37,8 +35,12 @@ class Lianjia():
             '烟台': {'city_id': '370600', 'max_lat': '37.590234', 'min_lat': '37.349651', 'max_lng': '121.698469',
                    'min_lng': '121.210365'},
             '厦门': {'city_id': '350200', 'max_lat': '24.794145', 'min_lat': '24.241819', 'max_lng': '118.533083',
-                   'min_lng': '117.892627'}
+                   'min_lng': '117.892627'},
+            '郑州':{'city_id': '410100', 'max_lat': '34.961967', 'min_lat': '34.473941', 'max_lng': '113.50206',
+                   'min_lng': '112.899549'}
         }
+        #https://ajax.lianjia.com/map/search/ershoufang/?callback=jQuery111109719454800982295_1562045315950&city_id=410100&group_type=district&max_lat=34.961967&min_lat=34.473941&max_lng=113.50206&min_lng=112.899549&sug_id=&sug_type=&filters=%7B%7D&request_ts=1562045339940&source=ljpc&authorization=a83c1b0e615c19505b0a399051fcb87f&_=1562045315957
+
         self.city_id = self.city_dict[city]['city_id']
         self.city = city
         self.url_fang = 'https://ajax.lianjia.com/map/resblock/ershoufanglist/?callback=jQuery11110617424919783834_1541868368031' \
@@ -367,7 +369,7 @@ def GetCompleteHousingInfo(city):
 
 
 if __name__ == '__main__':
-    city = '深圳'
-    SaveCityBorderIntoDB(city)  # 下载城市区域数据
+    city = '郑州'
+    #SaveCityBorderIntoDB(city)  # 下载城市区域数据
     HoleCityDown(city)  # 下载区域住房数据
-    GetCompleteHousingInfo(city)  # 获取详细在售房屋
+    #GetCompleteHousingInfo(city)  # 获取详细在售房屋

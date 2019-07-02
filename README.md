@@ -9,11 +9,7 @@
 # 运行
    
    
-+ ### 下载安装
 
-```commandline
-pip install LianJiaSpider
-```
 
 
 + ### 示例代码
